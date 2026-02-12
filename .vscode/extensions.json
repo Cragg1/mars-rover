@@ -1,0 +1,14 @@
+{
+    "recommendations": [
+        "gitlab.gitlab-workflow",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ryanluker.vscode-coverage-gutters",
+        "ivory-lab.jenkinsfile-support",
+        "ms-python.black-formatter",
+        "ms-python.mypy-type-checker",
+        "ms-python.flake8",
+        "ms-python.pylint",
+        "tamasfe.even-better-toml"
+    ]
+}

@@ -1,46 +1,57 @@
-from dataclasses import dataclass
-
+from typing import Optional
 from mars_rover.models import Direction, Position, TableBounds
 
 
-@dataclass
 class Rover:
-    bounds: TableBounds
-    position: Position
-    direction: Direction
+    """A Mars rover that can be positioned and moved around an empty table."""
 
     _MOVEMENT_CHANGES = {
         Direction.NORTH: (0, 1),
-        Direction.EAST:  (1, 0),
+        Direction.EAST: (1, 0),
         Direction.SOUTH: (0, -1),
-        Direction.WEST:  (-1, 0),
+        Direction.WEST: (-1, 0),
     }
 
-    def place(self, x: int, y: int, direction: Direction) -> None:
+    def __init__(
+        self,
+        bounds: TableBounds,
+        position: Optional[Position] = None,
+        direction: Optional[Direction] = None,
+    ):
+        self.bounds = bounds
+        self.position = position
+        self.direction = direction
+
+    def place(self, x: int, y: int, direction: Direction) -> str | None:
         pos = Position(x, y)
         if not self.bounds.contains(pos):
-            raise ValueError(f"Position {pos} is outside table bounds")
+            return f"Invalid PLACE command: position ({x},{y}) is outside table bounds"
         self.position = pos
         self.direction = direction
+        return None
 
     def _ensure_rover_is_placed(self) -> None:
         if self.position is None or self.direction is None:
             raise RuntimeError("Rover must be placed on the table first")
 
-    def move_forward(self) -> None:
+    def move(self) -> str | None:
         self._ensure_rover_is_placed()
         dx, dy = self._MOVEMENT_CHANGES[self.direction]
         new_pos = Position(self.position.x + dx, self.position.y + dy)
         if self.bounds.contains(new_pos):
             self.position = new_pos
+            return None
+        return f"Invalid MOVE command: would move rover outside table bounds"
 
-    def turn_left(self) -> None:
+    def left(self) -> str | None:
         self._ensure_rover_is_placed()
-        self.direction = self.direction.turn_left()
+        self.direction = self.direction.left()
+        return None
 
-    def turn_right(self) -> None:
+    def right(self) -> str | None:
         self._ensure_rover_is_placed()
-        self.direction = self.direction.turn_right()
+        self.direction = self.direction.right()
+        return None
 
     def report(self) -> str:
         self._ensure_rover_is_placed()

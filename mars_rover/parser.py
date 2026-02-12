@@ -3,43 +3,38 @@ from pydantic import ValidationError
 from mars_rover.commands import (
     Command,
     MoveCommand,
-    TurnLeftCommand,
-    TurnRightCommand,
+    LeftCommand,
+    RightCommand,
     ReportCommand,
-    PlaceArgs,
     PlaceCommand,
 )
-from mars_rover.models import Direction
+from mars_rover.models import Direction, PlaceArgs
 
 
 class CommandParser:
     """Parses user input into commands."""
 
-    USER_COMMANDS = {
-        "MOVE":  MoveCommand,
-        "LEFT":  TurnLeftCommand,
-        "RIGHT": TurnRightCommand,
+    _COMMANDS = {
+        "MOVE": MoveCommand,
+        "LEFT": LeftCommand,
+        "RIGHT": RightCommand,
         "REPORT": ReportCommand,
     }
 
-    # TODO: Better way to do parsing?
     def parse(self, user_input: str) -> Command:
-        cmds = user_input.strip().upper()
+        cmd = user_input.strip().upper()
 
-        # Place rover
-        if cmds.startswith("PLACE"):
-            return self._parse_place(cmds)
+        if cmd.startswith("PLACE"):
+            return self._parse_place(cmd)
 
-        # TODO: Doesn't work yet.
-        if cmds in self.USER_COMMANDS:
-            return self.USER_COMMANDS
+        if cmd in self._COMMANDS:
+            return self._COMMANDS[cmd]()
 
         raise ValueError(f"Unknown command: '{user_input}'")
 
     def _parse_place(self, text: str) -> PlaceCommand:
-        # TODO: Should regex here.
-        raw_args = text[5:].strip()  # remove 'PLACE'
-        parts = raw_args.split(",")
+        raw_args = text[5:].strip()  # removes "PLACE"
+        parts = [p.strip() for p in raw_args.split(",")]
 
         if len(parts) != 3:
             raise ValueError("PLACE requires exactly 3 arguments: PLACE X,Y,F")

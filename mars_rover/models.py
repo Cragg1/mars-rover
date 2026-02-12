@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import StrEnum
+from pydantic import BaseModel
 
 
 class Direction(StrEnum):
@@ -8,23 +9,23 @@ class Direction(StrEnum):
     SOUTH = "SOUTH"
     WEST = "WEST"
 
-    def turn_left(self) -> "Direction":
+    def left(self) -> "Direction":
         """Rotate rover counter-clockwise."""
         rotations = {
             Direction.NORTH: Direction.WEST,
             Direction.WEST: Direction.SOUTH,
             Direction.SOUTH: Direction.EAST,
-            Direction.EAST: Direction.NORTH
+            Direction.EAST: Direction.NORTH,
         }
         return rotations[self]
 
-    def turn_right(self) -> "Direction":
+    def right(self) -> "Direction":
         """Rotate rover clockwise."""
         rotations = {
             Direction.NORTH: Direction.EAST,
             Direction.EAST: Direction.SOUTH,
             Direction.SOUTH: Direction.WEST,
-            Direction.WEST: Direction.NORTH
+            Direction.WEST: Direction.NORTH,
         }
         return rotations[self]
 
@@ -43,7 +44,10 @@ class TableBounds:
     max_y: int = 5
 
     def contains(self, pos: Position) -> bool:
-        return (
-            self.min_x <= pos.x <= self.max_x
-            and self.min_y <= pos.y <= self.max_y
-        )
+        return self.min_x <= pos.x <= self.max_x and self.min_y <= pos.y <= self.max_y
+
+
+class PlaceArgs(BaseModel):
+    x: int
+    y: int
+    direction: Direction

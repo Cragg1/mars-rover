@@ -1,0 +1,45 @@
+{
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    },
+    "files.watcherExclude": {
+        "**/working/**": true,
+        "**/venv*/**": true,
+        "**/__pycache__/**": true,
+        "**/cover/**": true,
+        "**/.git/**": true,
+    },
+    "files.exclude": {
+        "**/venv*/**": true,
+        "**/__pycache__/**": true,
+        "**/.git/**": true,
+    },
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.autoTestDiscoverOnSaveEnabled": false,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": false,
+    "python.languageServer": "Pylance",
+    "coverage-gutters.coverageFileNames": [
+        "coverage.xml",
+    ],
+    "coverage-gutters.coverageReportFileName": "cover/index.html",
+    "coverage-gutters.ignoredPathGlobs": "**/{node_modules,venv,.venv,vendor,working}/**",
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "flake8.args": [
+        "--config=.flake8"
+    ],
+    "pylint.args": [
+        "--rcfile=.pylintrc"
+    ],
+    "editor.defaultFormatter": null,
+    "terminal.integrated.env.linux": {
+        "PYTHONPATH": "${workspaceFolder}"
+    }
+}
