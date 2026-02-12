@@ -1,4 +1,5 @@
 from typing import Optional
+
 from mars_rover.models import Direction, Position, TableBounds
 
 
