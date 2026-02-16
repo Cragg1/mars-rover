@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mars-rover"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = ["pydantic==2.12.5"]
 
 [project.optional-dependencies]
-dev = ["pytest==9.0.2", "pytest-cov"]
+dev = ["pytest==9.0.2", "pytest-cov", "flake8"]

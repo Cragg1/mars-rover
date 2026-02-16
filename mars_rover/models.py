@@ -1,3 +1,5 @@
+"""Models for rover simulation."""
+
 from dataclasses import dataclass
 from enum import StrEnum
 from pydantic import BaseModel
@@ -10,7 +12,7 @@ class Direction(StrEnum):
     WEST = "WEST"
 
     def left(self) -> "Direction":
-        """Rotate rover counter-clockwise."""
+        """Return direction after rotating 90° counter-clockwise."""
         rotations = {
             Direction.NORTH: Direction.WEST,
             Direction.WEST: Direction.SOUTH,
@@ -20,7 +22,7 @@ class Direction(StrEnum):
         return rotations[self]
 
     def right(self) -> "Direction":
-        """Rotate rover clockwise."""
+        """Return direction after rotating 90° clockwise."""
         rotations = {
             Direction.NORTH: Direction.EAST,
             Direction.EAST: Direction.SOUTH,
@@ -32,22 +34,29 @@ class Direction(StrEnum):
 
 @dataclass(frozen=True)
 class Position:
+    """Position on the table."""
+
     x: int
     y: int
 
 
 @dataclass(frozen=True)
 class TableBounds:
+    """Table boundary definition."""
+
     min_x: int = 0
     min_y: int = 0
     max_x: int = 5
     max_y: int = 5
 
     def contains(self, pos: Position) -> bool:
+        """Check if position is within table bounds."""
         return self.min_x <= pos.x <= self.max_x and self.min_y <= pos.y <= self.max_y
 
 
 class PlaceArgs(BaseModel):
+    """Validate PLACE command arguments."""
+
     x: int
     y: int
     direction: Direction

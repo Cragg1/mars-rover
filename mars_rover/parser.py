@@ -1,3 +1,5 @@
+"""Command parser for converting user input to command objects."""
+
 from pydantic import ValidationError
 
 from mars_rover.commands import (
@@ -9,10 +11,14 @@ from mars_rover.commands import (
     PlaceCommand,
 )
 from mars_rover.models import Direction, PlaceArgs
+from mars_rover.exceptions import InvalidCommandException
+from mars_rover.messages import ErrorMessages
 
 
 class CommandParser:
     """Parses user input into commands."""
+
+    PLACE_PREFIX = "PLACE"
 
     _COMMANDS = {
         "MOVE": MoveCommand,
@@ -22,22 +28,46 @@ class CommandParser:
     }
 
     def parse(self, user_input: str) -> Command:
+        """Parse user input into a command.
+
+        Args:
+            user_input (str): User input
+
+        Returns:
+            Command object
+
+        Raises:
+            InvalidCommandException: If command is unknown or invalid
+        """
         cmd = user_input.strip().upper()
 
-        if cmd.startswith("PLACE"):
+        if cmd.startswith(self.PLACE_PREFIX):
             return self._parse_place(cmd)
 
         if cmd in self._COMMANDS:
             return self._COMMANDS[cmd]()
 
-        raise ValueError(f"Unknown command: '{user_input}'")
+        raise InvalidCommandException(
+            ErrorMessages.UNKNOWN_COMMAND.format(command=user_input)
+        )
 
     def _parse_place(self, text: str) -> PlaceCommand:
-        raw_args = text[5:].strip()  # removes "PLACE"
+        """Parse PLACE command arguments.
+
+        Args:
+            text (str): PLACE command text
+
+        Returns:
+            PlaceCommand object
+
+        Raises:
+            InvalidCommandException: If PLACE command is malformed
+        """
+        raw_args = text[len(self.PLACE_PREFIX) :].strip()  # noqa: E203. Removes PLACE.
         parts = [p.strip() for p in raw_args.split(",")]
 
         if len(parts) != 3:
-            raise ValueError("PLACE requires exactly 3 arguments: PLACE X,Y,F")
+            raise InvalidCommandException(ErrorMessages.PLACE_REQUIRES_ARGS)
 
         try:
             args = PlaceArgs(
@@ -46,6 +76,8 @@ class CommandParser:
                 direction=Direction(parts[2]),
             )
         except (ValueError, ValidationError) as exc:
-            raise ValueError(f"Invalid PLACE command: {text}") from exc
+            raise InvalidCommandException(
+                ErrorMessages.INVALID_PLACE_COMMAND.format(text=text)
+            ) from exc
 
         return PlaceCommand(args)
