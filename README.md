@@ -12,10 +12,10 @@ This application simulates a rover moving on a 5x5 grid (expandable). The rover 
 mars_rover/
 ├── __init__.py
 ├── __main__.py
-├── commands.py      # Command pattern implementation
-├── exceptions.py    # Domain-specific exceptions
+├── commands.py      # Command pattern-like implementation
+├── exceptions.py    # Exceptions
 ├── main.py          # CLI interface
-├── messages.py      # Centralized error messages
+├── messages.py      # Error messages
 ├── models.py        # Domain models
 ├── parser.py        # Command parsing
 ├── result.py        # CommandResult type
@@ -87,6 +87,28 @@ flake8 mars_rover tests
 ```
 
 Current test coverage: **96%** (73 tests)
+
+### Test Data
+
+Sample input files in `tests/test_data/` exercise the application:
+
+| File | Description |
+|------|-------------|
+| `basic_movement.txt` | Simple placement and forward movement |
+| `rotation_test.txt` | LEFT and RIGHT rotation commands |
+| `boundary_test.txt` | Boundary prevention at table edges |
+| `full_tour.txt` | Multi-step navigation with direction changes |
+| `full_tour_detailed.txt` | Comprehensive tour with frequent position reports |
+| `error_cases.txt` | Invalid commands and edge cases |
+
+```bash
+python3 -m mars_rover < tests/test_data/basic_movement.txt
+python3 -m mars_rover < tests/test_data/rotation_test.txt
+python3 -m mars_rover < tests/test_data/boundary_test.txt
+python3 -m mars_rover < tests/test_data/full_tour.txt
+python3 -m mars_rover < tests/test_data/full_tour_detailed.txt
+python3 -m mars_rover < tests/test_data/error_cases.txt
+```
 
 ## Configuration
 
