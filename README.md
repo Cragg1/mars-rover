@@ -97,8 +97,8 @@ Sample input files in `tests/test_data/` exercise the application:
 | `basic_movement.txt` | Simple placement and forward movement |
 | `rotation_test.txt` | LEFT and RIGHT rotation commands |
 | `boundary_test.txt` | Boundary prevention at table edges |
-| `full_tour.txt` | Multi-step navigation with direction changes |
-| `full_tour_detailed.txt` | Comprehensive tour with frequent position reports |
+| `full_tour.txt` | Move around the table with direction changes |
+| `full_tour_detailed.txt` | Comprehensive tour with more position reports |
 | `error_cases.txt` | Invalid commands and edge cases |
 
 ```bash
@@ -107,6 +107,7 @@ python3 -m mars_rover < tests/test_data/rotation_test.txt
 python3 -m mars_rover < tests/test_data/boundary_test.txt
 python3 -m mars_rover < tests/test_data/full_tour.txt
 python3 -m mars_rover < tests/test_data/full_tour_detailed.txt
+python3 -m mars_rover < tests/test_data/edge_cases.txt
 python3 -m mars_rover < tests/test_data/error_cases.txt
 ```
 
@@ -120,17 +121,17 @@ bounds = TableBounds(min_x=0, min_y=0, max_x=5, max_y=5)
 
 ## Error Handling
 
-- Centralized error messages in `messages.py`
-- Domain-specific exceptions (`RoverNotPlacedException`, `InvalidCommandException`)
+- Error messages in `messages.py`
+- Exception classes (`RoverNotPlacedException`, `InvalidCommandException`)
 - CommandResult pattern for success/failure
 - Boundary violations prevented with feedback
 
 ## Production Considerations
 
-For larger deployments, consider:
+For larger deployments/codebases, I would consider using:
 
 - **Poetry** for dependency management
 - **Dynaconf** for configuration management
-- **Structured logging** with correlation IDs
+- **Structured logging**
 - **CI/CD** pipeline for automated testing
 - **Docker** for multi-system deployment
